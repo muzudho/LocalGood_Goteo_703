@@ -114,4 +114,38 @@
 		ALTER TABLE `localgood703`.`user` 
 		ADD COLUMN `home` VARCHAR(50) NOT NULL COMMENT '(^q^)Add 2016-02-23' AFTER `node`;
 
+	実行（てきとう）
+		UPDATE `localgood703`.`user` SET `home`='LOCAL GOOD FUKUOKA' WHERE `id`='root';
+
 ────────────────────────────────────────
+2016-02-23 01:29
+
+	解説
+		ローカルグッド横浜版GOTEOに追加されている、管理者の操作ログを
+		記録していくテーブル。
+
+	実行
+		CREATE TABLE user_login_log
+		(
+		    user VARCHAR(50) NOT NULL,
+		    node VARCHAR(50) NOT NULL,
+		    datetime TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+		    token VARCHAR(50) NOT NULL,
+		    expiration_date TIMESTAMP DEFAULT '0000-00-00 00:00:00' NOT NULL,
+		    CONSTRAINT `PRIMARY` PRIMARY KEY (user, node)
+		);
+
+────────────────────────────────────────
+2016-02-23 02:32
+
+/local-settings.php
+
+	解説
+		データベース名を指定する項目が追加されていた。
+
+	設定例
+		// LocalGood Common Authentication Database
+		define('COMMON_AUTH_DB_SCHEMA'		, 'localgood703');	// dbname=...
+
+────────────────────────────────────────
+
