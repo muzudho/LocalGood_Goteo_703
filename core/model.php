@@ -60,39 +60,39 @@ namespace Goteo\Core {
          */
         abstract public function validate (&$errors = array());
 
-        /**
-         *
-         */
-        protected function queryFilter($query){
-
-            $_query = $query;
-
-            if (!empty($_query)){
-
-                $ret = preg_match_all('/user([A-Za-z_]*)\./s',$_query, $_match);
-                if ($ret > 0){
-                    $_matched = array_unique($_match[0]);
-                    foreach ( $_matched as $_m ){
-                        $_query = preg_replace("/" . preg_quote($_m) ."/", "`gt_lg-common`." . $_m, $_query);
-                    }
-                }
-
-                $ret = preg_match_all('/(FROM|JOIN|TABLE|INTO|INSERT|UPDATE|DELETE|REPLACE|\()\s+user([A-Za-z_]*)/s', $_query, $_match);
-                if ($ret > 0){
-                    $_matched = array_unique($_match[0]);
-                    foreach ( $_matched as $_m ){
-                        $trim_m = preg_replace("/\s+/", " ", $_m);
-                        $_e = explode(' ', $trim_m);
-                        if (isset($_e[1])  && (strpos($_e[1], 'user') !== false)){
-                            $_e[1] = '`gt_lg-common`.' . $_e[1];
-                            $_s = implode(' ', $_e);
-                            $_query = preg_replace("/" . preg_quote($_m) ."/", $_s, $_query);
-                        }
-                    }
-                }
-            }
-            return $_query;
-        }
+         /**
+          *
+          */
+         protected function queryFilter($query){
+ 
+             $_query = $query;
+// 
+//             if (!empty($_query)){
+// 
+//                 $ret = preg_match_all('/user([A-Za-z_]*)\./s',$_query, $_match);
+//                 if ($ret > 0){
+//                     $_matched = array_unique($_match[0]);
+//                     foreach ( $_matched as $_m ){
+//                         $_query = preg_replace("/" . preg_quote($_m) ."/", "`gt_lg-common`." . $_m, $_query);
+//                     }
+//                 }
+// 
+//                 $ret = preg_match_all('/(FROM|JOIN|TABLE|INTO|INSERT|UPDATE|DELETE|REPLACE|\()\s+user([A-Za-z_]*)/s', $_query, $_match);
+//                 if ($ret > 0){
+//                     $_matched = array_unique($_match[0]);
+//                     foreach ( $_matched as $_m ){
+//                         $trim_m = preg_replace("/\s+/", " ", $_m);
+//                         $_e = explode(' ', $trim_m);
+//                         if (isset($_e[1])  && (strpos($_e[1], 'user') !== false)){
+//                             $_e[1] = '`gt_lg-common`.' . $_e[1];
+//                             $_s = implode(' ', $_e);
+//                             $_query = preg_replace("/" . preg_quote($_m) ."/", $_s, $_query);
+//                         }
+//                     }
+//                 }
+//             }
+             return $_query;
+         }
 
         /**
          * Consulta.

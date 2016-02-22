@@ -26,3 +26,92 @@
                     'init' => array('label' => Text::_('Viendo listado completo'), 'item' => true)
 
 ────────────────────────────────────────
+2016-02-23 00:19
+
+/core/model.php		63-95,108-109
+
+	解説
+		ＳＱＬクエリーのテーブル名の頭に「`gt_lg-common`.」というテーブル名修飾を
+		付けるフィルターをコメントアウト。
+
+	×
+        /**
+         *
+         */
+        protected function queryFilter($query){
+
+            $_query = $query;
+
+            if (!empty($_query)){
+
+                $ret = preg_match_all('/user([A-Za-z_]*)\./s',$_query, $_match);
+                if ($ret > 0){
+                    $_matched = array_unique($_match[0]);
+                    foreach ( $_matched as $_m ){
+                        $_query = preg_replace("/" . preg_quote($_m) ."/", "`gt_lg-common`." . $_m, $_query);
+                    }
+                }
+
+                $ret = preg_match_all('/(FROM|JOIN|TABLE|INTO|INSERT|UPDATE|DELETE|REPLACE|\()\s+user([A-Za-z_]*)/s', $_query, $_match);
+                if ($ret > 0){
+                    $_matched = array_unique($_match[0]);
+                    foreach ( $_matched as $_m ){
+                        $trim_m = preg_replace("/\s+/", " ", $_m);
+                        $_e = explode(' ', $trim_m);
+                        if (isset($_e[1])  && (strpos($_e[1], 'user') !== false)){
+                            $_e[1] = '`gt_lg-common`.' . $_e[1];
+                            $_s = implode(' ', $_e);
+                            $_query = preg_replace("/" . preg_quote($_m) ."/", $_s, $_query);
+                        }
+                    }
+                }
+            }
+            return $_query;
+        }
+
+	○
+         /**
+          *
+          */
+         protected function queryFilter($query){
+
+             $_query = $query;
+// 
+//             if (!empty($_query)){
+// 
+//                 $ret = preg_match_all('/user([A-Za-z_]*)\./s',$_query, $_match);
+//                 if ($ret > 0){
+//                     $_matched = array_unique($_match[0]);
+//                     foreach ( $_matched as $_m ){
+//                         $_query = preg_replace("/" . preg_quote($_m) ."/", "`gt_lg-common`." . $_m, $_query);
+//                     }
+//                 }
+// 
+//                 $ret = preg_match_all('/(FROM|JOIN|TABLE|INTO|INSERT|UPDATE|DELETE|REPLACE|\()\s+user([A-Za-z_]*)/s', $_query, $_match);
+//                 if ($ret > 0){
+//                     $_matched = array_unique($_match[0]);
+//                     foreach ( $_matched as $_m ){
+//                         $trim_m = preg_replace("/\s+/", " ", $_m);
+//                         $_e = explode(' ', $trim_m);
+//                         if (isset($_e[1])  && (strpos($_e[1], 'user') !== false)){
+//                             $_e[1] = '`gt_lg-common`.' . $_e[1];
+//                             $_s = implode(' ', $_e);
+//                             $_query = preg_replace("/" . preg_quote($_m) ."/", $_s, $_query);
+//                         }
+//                     }
+//                 }
+//             }
+             return $_query;
+         }
+
+────────────────────────────────────────
+2016-02-23 00:36
+
+	解説
+		ローカルグッド横浜の拠点を入れておくフィールドの追加。
+
+	実行
+		ALTER TABLE `localgood703`.`user` 
+		ADD COLUMN `home` VARCHAR(50) NOT NULL COMMENT '(^q^)Add 2016-02-23' AFTER `node`;
+
+────────────────────────────────────────
