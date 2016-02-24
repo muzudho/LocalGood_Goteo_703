@@ -1,40 +1,40 @@
-��������������������������������������������������������������������������������
+────────────────────────────────────────
 2016-02-22 22:22
 
-    ���
-        �f�[�^�x�[�X�쐬
+    解説
+        データベース作成
 
-    ���s
+    実行
         CREATE SCHEMA `localgood703` DEFAULT CHARACTER SET utf8 COLLATE utf8_bin ;
 
-��������������������������������������������������������������������������������
+────────────────────────────────────────
 2016-02-22 23:54
 
 /controller/admin.php   201-203
 
-    ���
-        �uText::�v�̒E���B
+    解説
+        「Text::」の脱字。
 
-    �~
+    ×
                     'list' => array('label' => _('Estado del envio automatico'), 'item' => false),
                     'init' => array('label' => _('Iniciando un nuevo boletin'), 'item' => false),
                     'init' => array('label' => _('Viendo listado completo'), 'item' => true)
 
-    ��
+    ○
                     'list' => array('label' => Text::_('Estado del envio automatico'), 'item' => false),
                     'init' => array('label' => Text::_('Iniciando un nuevo boletin'), 'item' => false),
                     'init' => array('label' => Text::_('Viendo listado completo'), 'item' => true)
 
-��������������������������������������������������������������������������������
+────────────────────────────────────────
 2016-02-23 00:19
 
 /core/model.php		63-95,108-109
 
-	���
-		�r�p�k�N�G���[�̃e�[�u�����̓��Ɂu`gt_lg-common`.�v�Ƃ����e�[�u�����C����
-		�t����t�B���^�[���R�����g�A�E�g�B
+	解説
+		ＳＱＬクエリーのテーブル名の頭に「`gt_lg-common`.」というテーブル名修飾を
+		付けるフィルターをコメントアウト。
 
-	�~
+	×
         /**
          *
          */
@@ -69,7 +69,7 @@
             return $_query;
         }
 
-	��
+	○
          /**
           *
           */
@@ -104,27 +104,27 @@
              return $_query;
          }
 
-��������������������������������������������������������������������������������
+────────────────────────────────────────
 2016-02-23 00:36
 
-	���
-		���[�J���O�b�h���l�̋��_�����Ă����t�B�[���h�̒ǉ��B
+	解説
+		ローカルグッド横浜の拠点を入れておくフィールドの追加。
 
-	���s
+	実行
 		ALTER TABLE `localgood703`.`user` 
 		ADD COLUMN `home` VARCHAR(50) NOT NULL COMMENT '(^q^)Add 2016-02-23' AFTER `node`;
 
-	���s�i�Ă��Ƃ��j
+	実行（てきとう）
 		UPDATE `localgood703`.`user` SET `home`='LOCAL GOOD FUKUOKA' WHERE `id`='root';
 
-��������������������������������������������������������������������������������
+────────────────────────────────────────
 2016-02-23 01:29
 
-	���
-		���[�J���O�b�h���l��GOTEO�ɒǉ�����Ă���A�Ǘ��҂̑��샍�O��
-		�L�^���Ă����e�[�u���B
+	解説
+		ローカルグッド横浜版GOTEOに追加されている、管理者の操作ログを
+		記録していくテーブル。
 
-	���s
+	実行
 		CREATE TABLE user_login_log
 		(
 		    user VARCHAR(50) NOT NULL,
@@ -135,17 +135,84 @@
 		    CONSTRAINT `PRIMARY` PRIMARY KEY (user, node)
 		);
 
-��������������������������������������������������������������������������������
+────────────────────────────────────────
 2016-02-23 02:32
 
 /local-settings.php
 
-	���
-		�f�[�^�x�[�X�����w�肷�鍀�ڂ��ǉ�����Ă����B
+	解説
+		データベース名を指定する項目が追加されていた。
 
-	�ݒ��
+	設定例
 		// LocalGood Common Authentication Database
 		define('COMMON_AUTH_DB_SCHEMA'		, 'localgood703');	// dbname=...
 
-��������������������������������������������������������������������������������
+────────────────────────────────────────
+2016-02-23 18:49
+
+	解説
+		無かったテーブルを　適当に推測して追加。
+
+    CREATE TABLE `localgood703`.`skill` (
+      `id` INT NOT NULL AUTO_INCREMENT,
+      `name` VARCHAR(50) NULL,
+      `description` VARCHAR(50) NULL,
+      `parent_skill_id` INT NULL,
+      `order` INT NULL,
+      PRIMARY KEY (`id`));
+
+    CREATE TABLE `localgood703`.`skill_lang` (
+      `id` INT NOT NULL AUTO_INCREMENT,
+      `name` VARCHAR(50) NULL,
+      `lang` VARCHAR(50) NULL,
+      `description` VARCHAR(50) NULL,
+      PRIMARY KEY (`id`));
+
+    CREATE TABLE `localgood703`.`user_skill` (
+      `user` VARCHAR(50) NOT NULL,
+      `skill` INT NULL,
+      PRIMARY KEY (`user`));
+
+    CREATE TABLE `localgood703`.`project_skill` (
+      `project` VARCHAR(50) NOT NULL,
+      `skill` INT NULL,
+      PRIMARY KEY (`project`));
+
+────────────────────────────────────────
+2016-02-23 20:31
+
+    解説
+        データベースに言語「日本語」追加。
+        ルートユーザーに「日本語」選択可能可。
+        ルートユーザーの lang を「ja」に更新。
+
+    実行
+        INSERT INTO `lang` (`id`, `name`, `active`, `short`, `locale`) VALUES ('ja', 'Japanese', '1', 'JPN', 'ja_JP');
+		INSERT INTO `user_translang` (`user`, `lang`) VALUES ('root', 'ja');
+		UPDATE `localgood703`.`user` SET `lang`='ja' WHERE `id`='root';
+────────────────────────────────────────────────────────────2016-02-24 00:04
+
+	解説
+		グーグル翻訳をかけたファイル。/db/texts(グーグル翻訳化).sql
+
+	実行
+		★略
+────────────────────────────────────────────────────────────
+2016-02-24 15:53
+
+    解説
+        /locale/ja_JP/LC_MESSAGES/messages.mo ファイルを作りたい。
+        poedit を使って保存する。
+        この際、
+        /locale/ja_JP/LC_MESSAGES/messages.po にエラーが３件あるので、
+        %s の数が合っていない翻訳を修正する。
+        管理者でログインしている場合、ログアウトしてログインし直すと　翻訳が再描画される。
+
+    実行
+        ★略
+
+────────────────────────────────────────────────────────────
+
+
+
 
