@@ -279,7 +279,7 @@
         ALTER TABLE `project_lang` 
         ADD COLUMN `evaluation` VARCHAR(50) NULL AFTER `subtitle`;
 
-        CREATE TABLE `localgood703`.`evaluation` (
+        CREATE TABLE `evaluation` (
           `id` VARCHAR(50) NOT NULL,
           `name` VARCHAR(50) NULL,
           `description` VARCHAR(50) NULL,
@@ -287,6 +287,7 @@
           `lang` VARCHAR(50) NULL,
           `node` VARCHAR(50) NULL,
           `content` VARCHAR(50) NULL,
+          `project` VARCHAR(50) NULL,
           PRIMARY KEY (`id`));
 ────────────────────────────────────────────────────────────
 2016-02-25 23:20
@@ -314,5 +315,36 @@
 
     実行
         /library/aws フォルダーを削除。
+────────────────────────────────────────────────────────────// ↓PHP 5.3.0 から dl() の使用は無効だった。
+//
+// 2016-02-26 19:07
+// 
+// C:\php\php.ini
+// 
+//     解説
+//         Apacheサーバーと PHP を組み合わせるときは enable_dl を ON に。
+//         それ以外のサーバーと PHP の組み合わせのときは
+//         セキュリティー上の都合で enable_dl を OFF に。
+//         dl は、PHPの動的ロード。
+// 
+//     ×
+//         enable_dl = Off
+//     ○
+//         enable_dl = On
 ────────────────────────────────────────────────────────────
+// 2016-02-26 20:48 「2016-02-25 18:04」に統合。
+// ALTER TABLE `evaluation` 
+// ADD COLUMN `project` VARCHAR(50) NULL AFTER `content`;
+────────────────────────────────────────────────────────────
+2016-02-26 21:20
 
+	解説
+		翻訳テーブルの内容を更新。
+
+	実行
+		UPDATE `text` SET `text`='あなたは、サイト名のコミュニティと対話するには、必ず<a href=\"/user/login\">サインイン</a>する必要があります。' WHERE `id`='user-login-required' and`lang`='ja';
+
+	問題点
+		FIXME: このタグは　エスケープされてしまって、リンクではなく文字列としてそのまま表示されてしまう。
+
+────────────────────────────────────────────────────────────
